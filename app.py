@@ -32,7 +32,7 @@ class users(db.Model):
 class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uniqueId = db.Column(db.String(24))
-    name = db.Column(db.String
+    name = db.Column(db.String)
     price = db.Column(db.String(20))
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     category = db.Column(db.String(20))
@@ -62,19 +62,28 @@ def mainIndex():
     # TODO: create login
     # getting all items in basket
     itemsInBasket = basket.query.filter_by(owner=current_user).all()
+    # getting basket price
+    total = getTotal(itemsInBasket)
     # rendering template
-    return render_template("index.html", allItems=allItems, itemsInBasket=itemsInBasket)
+    return render_template("index.html", allItems=allItems, itemsInBasket=itemsInBasket, total=total)
 
 # тут будуть кнопочки для того шоб вибрати послугами
 # також буде корзина з вибраними послугами
 
 # path for adding item to basket
+# IDK IF IT WORKS CHECK IT
+# IDK IF IT WORKS CHECK IT
+# IDK IF IT WORKS CHECK IT
+# IDK IF IT WORKS CHECK IT
+
 @app.route("/addItemToBasket/<name>/<price>/category")
 def addItemToBasket(name, price, category):
-    # getting item which we want to add into basket
-    item = getItemFromItems(name, price, category, items)
+    # test current user
+    current_user = "admin"
+    # checking if items exists
+    if checkIfExists(name, price, category, items):
     # appending item into basket
-    appendToBasket(item, basket, current_user, db)
+        appendToBasket(name, price, category, basket, current_user, db)
     # redirecting into main index
     return redirect("/")
 
