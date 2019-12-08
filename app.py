@@ -6,9 +6,7 @@ from flask_migrate import Migrate
 from flask  import  session
 from sqlalchemy.orm import sessionmaker
 
-# TODO: fill db with items
-
-# pls ignore syntax errors in db (ide bug)
+# TODO: fix total basket value and checkout
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
@@ -64,16 +62,13 @@ def mainIndex():
         current_user = session.get("user")
         # getting all items
         allItems = items.query.all()
-        # TODO: create login
-
         # getting all items in basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
         # getting basket price
 
         # doesnt work total
         total = getTotal(itemsInBasket)
-
-        # TODO: filter items by cantegory
+        # TODO: filter items by category
 
         # rendering template
         return render_template("index.html", items=allItems, basket=itemsInBasket,total=total)
@@ -85,26 +80,32 @@ def mainIndex():
 # path for adding item to basket
 @app.route("/addItemToBasket/<name>/<price>/<category>")
 def addItemToBasket(name, price, category):
-    # test current user
-    current_user = session.get("user")
-    # checking if items exists
-    if checkIfExists(name, price, category, items):
-    # appending item into basket
-        appendToBasket(name, price, category, basket, current_user, db)
-    # redirecting into main index
-    return redirect("/")
+    if session.get("logged_in"):
+        # test current user
+        current_user = session.get("user")
+        # checking if items exists
+        if checkIfExists(name, price, category, items):
+        # appending item into basket
+            appendToBasket(name, price, category, basket, current_user, db)
+        # redirecting into main index
+        return redirect("/")
+    else:
+        return redirect("/login")
 
 # path for adding item into db
 @app.route("/additemIntoItems/<name>/<price>/<category>")
 def additemIntoItems(name, price, category):
-    # creating model of item
-    newItem = items(name=name, price=price, category=category)
-    # appending into db
-    db.session.add(newItem)
-    # saving changes of db
-    db.session.commit()
-    # redirecting into main index
-    return redirect("/")
+    if session.get("logged_in"):
+        # creating model of item
+        newItem = items(name=name, price=price, category=category)
+        # appending into db
+        db.session.add(newItem)
+        # saving changes of db
+        db.session.commit()
+        # redirecting into main index
+        return redirect("/")
+    else:
+        return redirect("/")
 
 # path for deleting item from item model
 @app.route("/deleteitemFromItems/<name>/<price>/<category>")
@@ -136,12 +137,15 @@ def deleteItemFromBasket(name, price, category):
 
 @app.route("/checkout")
 def checkout():
-    current_user = session.get("user")
-    itemsInBasket = basket.query.filter_by(owner=current_user).all()
-    deleteAllBasket(itemsInBasket, db)
-    return redirect("/")
+    if session.get("logged_in"):
+        current_user = session.get("user")
+        itemsInBasket = basket.query.filter_by(owner=current_user).all()
+        deleteAllBasket(itemsInBasket, db)
+        return redirect("/")
     # checkouting 
     # deleting items from basket
+    else:
+        return redirect("/login")
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
