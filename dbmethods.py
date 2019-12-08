@@ -1,6 +1,11 @@
 import random
 import string
 
+def itemIsInBasketAlready(name, price, category, basket, current_user):
+    if getItemFromBasket(name, price, category, basket, current_user) != 404:
+        return True
+    else:
+        return False
 
 def randomString(stringLenght=24):
     return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(stringLenght))
@@ -17,9 +22,14 @@ def getItemFromItems(name, price, category, items):
         return 404
 
 def appendToBasket(name, price, category, basket, current_user, db):
-    newBasketItem = basket(name=name, price=price, category=category, owner=current_user)
-    db.session.add(newBasketItem)
-    db.session.commit()
+    if itemIsInBasketAlready(name, price, category, basket, current_user):
+        item = getItemFromBasket(name, price, category, basket, owner)
+        item.howMany += 1
+        db.session.commit()
+    else:
+        newBasketItem = basket(name=name, price=price, category=category, owner=current_user)
+        db.session.add(newBasketItem)
+        db.session.commit()
     return 0
 
 def getItemFromBasket(name, price, category, basket, owner):

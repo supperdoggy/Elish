@@ -15,7 +15,9 @@
     <label> Basket </label>
     {% for b in basket %}
             <div>
-                <label>{{b.name}} - {{b.price}}</label>
+                <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
+                <a href="/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}"><input type="button" value="Delete"></a>
+                
             </div>
     {% endfor %}
     <br>
