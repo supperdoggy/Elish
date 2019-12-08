@@ -33,6 +33,17 @@ def getItemFromBasket(name, price, category, basket, owner):
     except:
         return 404
 
+def checkAccess(password, username, users):
+    i = 0
+    try:
+        while True:
+            if users.query[i].username == username and users.query[i].password == password:
+                return True
+            else:
+                i += 1
+    except:
+        return False
+
 def checkIfExists(name, price, category, items):
     i = 0
     try:
