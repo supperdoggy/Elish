@@ -135,6 +135,7 @@ def deleteItemFromBasket(name, price, category):
     else:
         return redirect("/login")
 
+# TODO:
 @app.route("/checkout")
 def checkout():
     if session.get("logged_in"):
@@ -147,6 +148,7 @@ def checkout():
     else:
         return redirect("/login")
 
+# ========================== login ========================== #
 @app.route("/login", methods=["POST", "GET"])
 def login():
     session["logged_in"] = False
@@ -160,6 +162,7 @@ def login():
             return redirect("/login")
     else:
         return render_template("login.html")
+# ========================== login ========================== #
 
 if __name__ == "__main__":
     app.run(debug=True)
