@@ -58,14 +58,14 @@ def mainIndex():
     # test current user
     current_user = "admin"
     # getting all items
-    allItems = items.query.get_or_404().all()
+    allItems = items.query.all()
     # TODO: create login
     # getting all items in basket
     itemsInBasket = basket.query.filter_by(owner=current_user).all()
     # getting basket price
     total = getTotal(itemsInBasket)
     # rendering template
-    return render_template("index.html", allItems=allItems, itemsInBasket=itemsInBasket, total=total)
+    return render_template("index.html", items=allItems, basket=itemsInBasket,total=total)
 
 # тут будуть кнопочки для того шоб вибрати послугами
 # також буде корзина з вибраними послугами
@@ -76,7 +76,7 @@ def mainIndex():
 # IDK IF IT WORKS CHECK IT
 # IDK IF IT WORKS CHECK IT
 
-@app.route("/addItemToBasket/<name>/<price>/category")
+@app.route("/addItemToBasket/<name>/<price>/<category>")
 def addItemToBasket(name, price, category):
     # test current user
     current_user = "admin"
@@ -111,6 +111,7 @@ def deleteitemFromItems(name, price, category):
     # redirecting into main index
     return redirect("/")
 
+# path from deleting item from basket
 @app.route("/deleteitemfrombasket/<name>/<price>/<category>")
 def deleteItemFromBasket(name, price, category):
     # getting item from basket
@@ -121,6 +122,15 @@ def deleteItemFromBasket(name, price, category):
     db.session.commit()
     # redirecting into main index
     return redirect("/")
+
+@app.route("/checkout")
+def checkout():
+    current_user = "admin"
+    itemsInBasket = basket.query.filter_by(owner=current_user).all()
+    deleteAllBasket(itemsInBasket, db)
+    return redirect("/")
+    # checkouting 
+    # deleting items from basket
 
 if __name__ == "__main__":
     app.run(debug=True)

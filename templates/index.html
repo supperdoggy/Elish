@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    {% for i in items %}
+    <div>
+        <a href="/addItemToBasket/{{i.name}}/{{i.price}}/{{i.category}}"><input type="button" value="{{i.name}}" name="{{i.name}}" id="{{i.name}}"></a>
+    </div>
+    {% endfor %}
+    <label> Basket </label>
+    {% for b in basket %}
+            <div>
+                <label>{{b.name}} - {{b.price}}</label>
+            </div>
+    {% endfor %}
+    <br>
+    <form action="/checkout">
+        <div>
+            <h1>Total = {{total}}</h1>
+        </div>
+    <input type="submit" value="checkout" name="checkout">
+    </form>
+    
+</body>
+</html>

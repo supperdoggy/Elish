@@ -46,22 +46,21 @@ def checkIfExists(name, price, category, items):
 
 def getTotal(basket):
     i = 0
-    prices = []
+    total = 0
     while True:
         try:
-            if basket.query[i].price.__contains__("-"):
-                j = -1
-                while True:
-                    if basket.query[i].price != "-" or basket.query[i].price == "-":
-                        basket.query[i].price.remove(basket.query[i].price[j])
-                        j -= 1
-                    else:
-                        break
-                    prices.append(basket.query[i].price)
-                    print(prices)
-            else:
-                prices.append(basket.query[i].price)
+            total += int(basket.query[i].price)
+            i += 1
         except:
-            return prices
-        
+            return total
+
+def deleteAllBasket(basket, db):
+    i = 0
+    while True:
+        try:
+            db.session.delete(basket.query[i])
+            i+=1
+            db.session.commit()
+        except:
+            return 0
             
