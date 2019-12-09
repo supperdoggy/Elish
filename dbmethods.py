@@ -65,15 +65,22 @@ def checkIfExists(name, price, category, items):
     except:
         return False
 
+#  fix this FUCK BOY
 def getTotal(basket):
     i = 0
     total = 0
-    while True:
+    def totaladd(basket, i):
         try:
-            total += int(basket.query[i].price)
-            i += 1
+            return basket.query[i].price * basket.query[i].howMany
         except:
+            return 0
+    while True:
+        prev = total
+        total += totaladd(basket, i)
+        if total == prev:
             return total
+        else:
+            i+=1
 
 def deleteAllBasket(basket, db):
     i = 0

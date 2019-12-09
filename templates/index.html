@@ -12,7 +12,8 @@
         <a href="/addItemToBasket/{{i.name}}/{{i.price}}/{{i.category}}"><input type="button" value="{{i.name}}" name="{{i.name}}" id="{{i.name}}"></a>
     </div>
     {% endfor %}
-    <label> Basket </label>
+    <br>
+    <label><h1>Basket</h1></label>
     {% for b in basket %}
             <div>
                 <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
@@ -23,7 +24,7 @@
     <br>
     <form action="/checkout">
         <div>
-            <h1>Total = {{total}}</h1>
+            <h2>Total = {{total}}</h2>
         </div>
     <input type="submit" value="checkout" name="checkout">
     </form>
