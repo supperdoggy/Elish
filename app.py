@@ -75,7 +75,7 @@ def mainIndex():
         total = getTotal(itemsInBasket)
         # TODO: filter items by category
 
-        empty = False if total==0 else True
+        empty = False if total != 0 else True
 
         # rendering template
         return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty)
