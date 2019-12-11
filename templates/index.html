@@ -22,11 +22,14 @@
             </div>
     {% endfor %}
     <br>
-    <form action="/checkout">
+    <form action="/bill">
         <div>
             <h2>Total = {{total}}</h2>
         </div>
-    <input type="submit" value="checkout" name="checkout">
+        {% if empty %}
+            <input type="submit" value="checkout" name="checkout">  
+        {% endif %}
+        
     </form>
     
 </body>

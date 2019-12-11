@@ -6,8 +6,7 @@ from flask_migrate import Migrate
 from flask  import  session
 from sqlalchemy.orm import sessionmaker
 
-# TODO: fix total basket value and checkout
-# TODO: checkout, total value of basket
+# TODO: saving data
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
@@ -76,8 +75,10 @@ def mainIndex():
         total = getTotal(itemsInBasket)
         # TODO: filter items by category
 
+        empty = False if total==0 else True
+
         # rendering template
-        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total)
+        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty)
     else:
         return redirect("/login")
 # тут кнопочки для того шоб вибрати послугами
@@ -159,6 +160,16 @@ def checkout():
         return redirect("/")
     # checkouting 
     # deleting items from basket
+    else:
+        return redirect("/login")
+
+@app.route("/bill")
+def bill():
+    if session.get("logged_in"):
+        current_user = session.get("user")
+        itemsInBasket = basket.query.filter_by(owner=current_user).all()
+        total = getTotal(itemsInBasket)
+        return render_template("bill.html", basket=itemsInBasket, total=total)
     else:
         return redirect("/login")
 
