@@ -65,16 +65,18 @@ def mainIndex():
     if session.get("logged_in"):
         # test current user
         current_user = session.get("user")
+
         # getting all items
         allItems = items.query.all()
+
         # getting all items in basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
+        
         # getting basket price
-
-        # doesnt work total
         total = getTotal(itemsInBasket)
         # TODO: filter items by category
 
+        # checks if basket is empty by value of total
         empty = False if total != 0 else True
 
         # rendering template
@@ -137,7 +139,7 @@ def deleteItemFromBasket(name, price, category):
         
         # кароче треба замість того шоб добавляти одне й те саме, можна просто приробити віконечко і там відображати кількість товарів
         # + можна буде зробити розрахунок на фарбу лол
-        # але тоді треба буде тупо додати всі товари і чекати кліькість товарів, якщо менше 1, то тупо не враховувати в чек лол 
+        # але тоді треба буде тупо додати всі товари
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
             getItemFromBasket(name, price, category, basket, current_user).howMany -= 1
             db.session.commit()
@@ -150,19 +152,22 @@ def deleteItemFromBasket(name, price, category):
     else:
         return redirect("/login")
 
-# TODO:
+# TODO: data save for items
 @app.route("/checkout")
 def checkout():
     if session.get("logged_in"):
         current_user = session.get("user")
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
         deleteAllBasket(itemsInBasket, db)
+
+
+        total = getTotal(itemsInBasket)
+        saveData(itemsInBasket, total)
         return redirect("/")
-    # checkouting 
-    # deleting items from basket
     else:
         return redirect("/login")
 
+# bill template
 @app.route("/bill")
 def bill():
     if session.get("logged_in"):
