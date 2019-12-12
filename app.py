@@ -1,23 +1,25 @@
 from flask import Flask, redirect, render_template,request
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+import datetime
 from dbmethods import *
 from flask_migrate import Migrate
 from flask  import  session
 from sqlalchemy.orm import sessionmaker
+from save import *
+from constants import *
 
-# TODO: saving data
+# TODO: sending data
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
 # configurating db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///main.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = dbPath
 # getting db
 db = SQLAlchemy(app)
 # creating migration settings
 migrate = Migrate(app, db)
 # secret key
-app.secret_key = "dsagfhjsagkhjrgu123hjkgerkfhjsaghfjgh3qj1gwqruyaf"
+app.secret_key = secretKey
 
 # ============================================= db models =============================================
 
@@ -27,7 +29,7 @@ class users(db.Model):
     uniqueId = db.Column(db.String, default=randomString())
     username = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(200))
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def __repl__(self):
         return "<User %s>" % self.id
@@ -38,7 +40,7 @@ class items(db.Model):
     uniqueId = db.Column(db.String(24))
     name = db.Column(db.String)
     price = db.Column(db.Integer)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.now())
     category = db.Column(db.String(20))
 
     def __repl__(self):
@@ -49,7 +51,7 @@ class basket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     price = db.Column(db.Integer)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, default=datetime.datetime.now())
     category = db.Column(db.String(20))
     owner = db.Column(db.String)
     howMany = db.Column(db.Integer, default=1)
@@ -158,11 +160,14 @@ def checkout():
     if session.get("logged_in"):
         current_user = session.get("user")
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
-        deleteAllBasket(itemsInBasket, db)
-
-
+        
+        # saving data into txt file named after todays date
         total = getTotal(itemsInBasket)
         saveData(itemsInBasket, total)
+
+        # deleting items in basket
+        deleteAllBasket(itemsInBasket, db)
+
         return redirect("/")
     else:
         return redirect("/login")
