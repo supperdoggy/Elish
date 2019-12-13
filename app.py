@@ -8,7 +8,6 @@ from sqlalchemy.orm import sessionmaker
 from save import *
 from constants import *
 
-# TODO: sending data
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
@@ -154,7 +153,7 @@ def deleteItemFromBasket(name, price, category):
     else:
         return redirect("/login")
 
-# TODO: data save for items
+
 @app.route("/checkout")
 def checkout():
     if session.get("logged_in"):
@@ -186,14 +185,20 @@ def bill():
 # ========================== login ========================== #
 @app.route("/login", methods=["POST", "GET"])
 def login():
+    # resseting cookies
     session["logged_in"] = False
     session["user"] = None
+
     if request.method == "POST":
+        # if password and username matches in db then True
         if checkAccess(request.form["password"], request.form["username"], users):
+            # updating cookie
             session["logged_in"] = True
             session["user"] = request.form["username"]
+
             return redirect("/")
         else:
+            # else redirect back to login
             return redirect("/login")
     else:
         return render_template("login.html")
