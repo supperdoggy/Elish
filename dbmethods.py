@@ -27,14 +27,14 @@ def getItemFromItems(name, price, category, items):
 # appending item to the basket
 def appendToBasket(name, price, category, basket, current_user, db):
     if itemIsInBasketAlready(name, price, category, basket, current_user):
-        item = getItemFromBasket(name, price, category, basket, owner)
+        # changed here from owner to current_user, check if it works
+        item = getItemFromBasket(name, price, category, basket, current_user)
         item.howMany += 1
         db.session.commit()
     else:
         newBasketItem = basket(name=name, price=price, category=category, owner=current_user)
         db.session.add(newBasketItem)
         db.session.commit()
-    return 0
 
 # getting item from the basket
 def getItemFromBasket(name, price, category, basket, owner):

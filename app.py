@@ -35,7 +35,6 @@ class users(db.Model):
 
 # model class for items
 
-# TODO: fixedPrice = True/False
 
 class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
