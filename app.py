@@ -34,6 +34,9 @@ class users(db.Model):
         return "<User %s>" % self.id
 
 # model class for items
+
+# TODO: fixedPrice = True/False
+
 class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uniqueId = db.Column(db.String(24))

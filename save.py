@@ -1,7 +1,7 @@
 import datetime
 import os
 
-
+# saving data for python bot
 def saveData(basket, total):
     if os.path.exists("bills/" + str(datetime.date.today()) + ".txt"):
         f = open("bills/" + str(datetime.date.today()) + ".txt", "a+")
