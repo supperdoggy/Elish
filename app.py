@@ -75,7 +75,10 @@ def mainIndex():
         
         # getting basket price
         total = getTotal(itemsInBasket)
+
+
         # TODO: filter items by category
+
 
         # checks if basket is empty by value of total
         empty = False if total != 0 else True
@@ -141,6 +144,8 @@ def deleteItemFromBasket(name, price, category):
         # кароче треба замість того шоб добавляти одне й те саме, можна просто приробити віконечко і там відображати кількість товарів
         # + можна буде зробити розрахунок на фарбу лол
         # але тоді треба буде тупо додати всі товари
+
+        # TODO: rewrite this if else statement cus this is shit
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
             getItemFromBasket(name, price, category, basket, current_user).howMany -= 1
             db.session.commit()
@@ -192,6 +197,7 @@ def login():
     if request.method == "POST":
         # if password and username matches in db then True
         if checkAccess(request.form["password"], request.form["username"], users):
+
             # updating cookie
             session["logged_in"] = True
             session["user"] = request.form["username"]
