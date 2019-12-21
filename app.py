@@ -20,7 +20,7 @@ migrate = Migrate(app, db)
 # secret key
 app.secret_key = secretKey
 
-# ============================================= db models =============================================
+# ========================== db models ========================== #
 
 # model class for users
 class users(db.Model):
@@ -34,8 +34,6 @@ class users(db.Model):
         return "<User %s>" % self.id
 
 # model class for items
-
-
 class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uniqueId = db.Column(db.String(24))
@@ -60,7 +58,7 @@ class basket(db.Model):
     def __repl__(self):
         return "<Item %s>" % self.id
 
-# ============================================= db models =============================================
+# ========================== db models ========================== #
 
 # path for main index
 @app.route("/")
@@ -145,7 +143,6 @@ def deleteItemFromBasket(name, price, category):
         # + можна буде зробити розрахунок на фарбу
         # але тоді треба буде тупо додати всі товари
 
-        # TODO: rewrite this if else statement cus this is shit
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
             getItemFromBasket(name, price, category, basket, current_user).howMany -= 1
             db.session.commit()
