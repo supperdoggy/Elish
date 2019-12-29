@@ -12,7 +12,6 @@ from constants import *
 # TODO: Fill db with items via telegram bot
 # TODO: short, long cut
 # TODO: make it possible to write amout of paint
-# TODO: bill template
 
 
 # declaring app and template folder
@@ -75,7 +74,10 @@ def main(category):
         current_user = session.get("user")
 
         # getting all items
-        allItems = items.query.filter_by(category=category).all()
+        if category == 0:
+            allItems = items.query.all()
+        else:
+            allItems = items.query.filter_by(category=category).all()
 
         # getting all items in basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
@@ -96,26 +98,7 @@ def main(category):
 # path for main index
 @app.route("/")
 def mainIndex():
-    if session.get("logged_in"):
-        # test current user
-        current_user = session.get("user")
-
-        # getting all items
-        allItems = items.query.all()
-
-        # getting all items in basket
-        itemsInBasket = basket.query.filter_by(owner=current_user).all()
-        
-        # getting basket price
-        total = getTotal(itemsInBasket)
-
-        # checks if basket is empty by value of total
-        empty = False if total != 0 else True
-
-        # rendering template
-        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty, categories=categories)
-    else:
-        return redirect("/login")
+    return main(0)
 # тут кнопочки для того шоб вибрати послугами
 # також корзина з вибраними послугами
 
