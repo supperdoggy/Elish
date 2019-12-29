@@ -1,17 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+
+body{
+  background-color:#ABEBC6;
+}
+
+.back{
+
+  border-radius: 25px;
+  background: white;
+  padding: 20px;
+  width: 80%;
+
+}
+
 .column {
-    float: left;
-    width: 50%;
-    padding: 5px;
-  }
-  
-  /* Clear floats after image containers */
-  .row::after {
-    content: "";
-    clear: both;
-    display: table;
-  }
-  @media screen and (max-width: 500px) {
-    .column {
-      width: 100%;
-    }
-  }
+
+  float: left;
+  padding: 10px;
+}
+
+.center{
+  width: 50%;
+}
+
+.left {
+  width: 20%;
+}
+
+.right {
+  width: 30%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.leftbutton{
+  background-color: white; 
+  border: 2px solid rgb(192, 240, 62);
+  border-radius: 8px;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  width: 100%;
+}
+
+.button {
+  background-color: white; 
+  border: 2px solid rgb(192, 240, 62);
+  border-radius: 8px;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  width: 30%;
+}
+
+.button:hover {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+

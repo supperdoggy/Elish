@@ -9,37 +9,51 @@
 </head>
 <body>
     <div class="row">
-        <div class="column">
-        {% for i in items %}
-            <a href="/addItemToBasket/{{i.name}}/{{i.price}}/{{i.category}}"><input type="button" value="{{i.name}}" name="{{i.name}}" id="{{i.name}}"></a>
-        {% endfor %}
-        </div>
 
-        <br>
-        <div class="column">
-            <label><h1>Basket</h1></label>
-            {% for b in basket %}
-                    <div>
-                        <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
-                        <a href="/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}"><input type="button" value="Delete"></a>
-                        
-                    </div>
-            {% endfor %}
-            <br>
-            <form action="/bill">
+        <div class="column left">
+            <div class="back">
+                {% for n in categories %}
                 <div>
-                    <h2>Total = {{total}}</h2>
-                </div>
+                    <a href="/{{n}}"><input type="button" class="leftbutton" value="{{n}}"></a>
+                </div> 
+                <br>           
+                {% endfor %}
+            </div>
+
         
-                {% if not empty %}
-                    <input type="submit" value="checkout" name="checkout">  
-                {% endif %}
-                
-            </form>
         </div>
 
-    </div>
-
+        <div class="column center">
+            {% for i in items %}
+                <a href="/addItemToBasket/{{i.name}}/{{i.price}}/{{i.category}}"><input type="button" class="button" value="{{i.name}}" name="{{i.name}}" id="{{i.name}}"></a>
+            {% endfor %}
+            </div>
     
+            <br>
+    
+            <div class="column right">
+                <div class="back">
+                    <label style="text-align: center;"><h1>Basket</h1></label>
+                    {% for b in basket %}
+                            <div>
+                                <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
+                                <a href="/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}"><input type="button" value="Delete"></a>
+                                
+                            </div>
+                    {% endfor %}
+                    <br>
+                    <form action="/bill">
+                        <div>
+                            <h1>Total = {{total}}</h1>
+                        </div>
+                
+                        {% if not empty %}
+                            <input type="submit" value="checkout" name="checkout">  
+                        {% endif %}
+                        
+                    </form>
+                </div>
+            </div>
+    </div>
 </body>
 </html>

@@ -9,6 +9,11 @@ from save import *
 from constants import *
 
 
+# TODO: Fill db with items via telegram bot
+# TODO: short, long cut
+# TODO: make it possible to write amout of paint
+
+
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
 # configurating db
@@ -60,6 +65,33 @@ class basket(db.Model):
 
 # ========================== db models ========================== #
 
+# TODO: simplify code
+
+@app.route("/<category>")
+def main(category):
+    if session.get("logged_in"):
+        # test current user
+        current_user = session.get("user")
+
+        # getting all items
+        allItems = items.query.filter_by(category=category).all()
+
+        # getting all items in basket
+        itemsInBasket = basket.query.filter_by(owner=current_user).all()
+        
+        # getting basket price
+        total = getTotal(itemsInBasket)
+
+        # TODO: filter items by category
+
+        # checks if basket is empty by value of total
+        empty = False if total != 0 else True
+
+        # rendering template
+        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty, categories=categories)
+    else:
+        return redirect("/login")  
+
 # path for main index
 @app.route("/")
 def mainIndex():
@@ -76,13 +108,11 @@ def mainIndex():
         # getting basket price
         total = getTotal(itemsInBasket)
 
-        # TODO: filter items by category
-
         # checks if basket is empty by value of total
         empty = False if total != 0 else True
 
         # rendering template
-        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty)
+        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty, categories=categories)
     else:
         return redirect("/login")
 # тут кнопочки для того шоб вибрати послугами
@@ -136,19 +166,21 @@ def deleteitemFromItems(name, price, category):
 def deleteItemFromBasket(name, price, category):
     if session.get("logged_in"):
         current_user = session.get("user")
-        # getting item from basket
-        # deleting item from db
         
         # кароче треба замість того шоб добавляти одне й те саме, можна просто приробити віконечко і там відображати кількість товарів
         # + можна буде зробити розрахунок на фарбу
         # але тоді треба буде тупо додати всі товари
 
+        # checking if item is in the basket already
+        # if is and amout is more  than 1 than it deletes only one piece
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
             getItemFromBasket(name, price, category, basket, current_user).howMany -= 1
-            db.session.commit()
+            
+        # if not then it deletes the whole item
         else:
             db.session.delete(getItemFromBasket(name, price, category, basket, current_user))
-            db.session.commit()
+        
+        db.session.commit()
         # saving changes of db
         # redirecting into main index
         return redirect("/")
