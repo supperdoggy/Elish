@@ -1,0 +1,72 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body{
+    background-color:#ABEBC6;
+  }
+  
+  .back{
+    border-radius: 25px;
+    background: white;
+    padding: 20px;
+    width: 80%;
+    margin: 0 auto;
+  
+  }
+
+
+  .buttonTrue {
+    background-color: white; 
+    border: 2px solid rgb(192, 240, 62);
+    border-radius: 8px;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    width: 100%;
+  }
+
+  .buttonFalse {
+    background-color: white; 
+    border: 2px solid rgb(181, 46, 31);
+    border-radius: 8px;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    width: 100%;
+  }
+  
+  .buttonFalse:hover {
+    background-color: rgb(181, 46, 31); /* Green */
+    color: white;
+  }
+
+  .buttonTrue:hover {
+    background-color: rgb(145, 184, 38); /* Green */
+    color: white;
+  }
+
+  .column {
+
+    float: left;
+    width: 50%;
+    padding: 10px;
+  }
+  
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  
+  

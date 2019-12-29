@@ -27,17 +27,24 @@
             {% for i in items %}
                 <a href="/addItemToBasket/{{i.name}}/{{i.price}}/{{i.category}}"><input type="button" class="button" value="{{i.name}}" name="{{i.name}}" id="{{i.name}}"></a>
             {% endfor %}
-            </div>
+        </div>
     
-            <br>
+        <br>
     
-            <div class="column right">
+        <div class="column right">
                 <div class="back">
                     <label style="text-align: center;"><h1>Basket</h1></label>
                     {% for b in basket %}
                             <div>
-                                <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
-                                <a href="/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}"><input type="button" value="Delete"></a>
+                                <div class="row">
+                                    <div class="column">
+                                        <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
+
+                                    </div>
+                                    <div class="column">
+                                        <a href="/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}"><input class="delete" type="button" value="Delete"></a>
+                                    </div>
+                                </div>
                                 
                             </div>
                     {% endfor %}
@@ -53,7 +60,7 @@
                         
                     </form>
                 </div>
-            </div>
+        </div>
     </div>
 </body>
 </html>

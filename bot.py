@@ -2,6 +2,8 @@ import telebot
 from constants import token, MaksId
 import datetime
 
+# TODO: Fill db with items via telegram bot
+
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])

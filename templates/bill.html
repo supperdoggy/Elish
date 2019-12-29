@@ -4,20 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="static/css/bill.css">
     <title>Bill</title>
 </head>
 <body>
-    <div>
-        {% for n in basket %}
-                <h2>{{n.name}}: {{n.price}}</h2>
-                <h3>Кількість: {{n.howMany}}</h3>
+    <div class="back">
+        <div style="text-align: center;">
+            {% for n in basket %}
+            <h2>{{n.name}}: {{n.price}}</h2>
+            <h3>Кількість: {{n.howMany}}</h3>
         {% endfor %}
         <br>
-        <h1>До сплати: {{total}} грн</h1>
+        </div>
 
-        <form action="/checkout">
-            <input type="submit" value="Відправити">
-        </form>
+        <h1>До сплати: {{total}} грн</h1>
+        <div style="text-align: center;">
+            <div class="row">
+                <div class="column">
+                    <form action="/">
+                        <input class="buttonFalse" type="submit" value="Назад">
+                    </form>
+                </div>
+                <div class="column">
+                    <form action="/checkout">
+                        <input class="buttonTrue" type="submit" value="Відправити">
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -12,6 +12,7 @@ from constants import *
 # TODO: Fill db with items via telegram bot
 # TODO: short, long cut
 # TODO: make it possible to write amout of paint
+# TODO: bill template
 
 
 # declaring app and template folder
