@@ -9,7 +9,6 @@ from save import *
 from constants import *
 
 
-# TODO: Fill db with items via telegram bot
 # TODO: short, long cut
 # TODO: make it possible to write amout of paint
 
