@@ -65,7 +65,6 @@ class basket(db.Model):
 
 # ========================== db models ========================== #
 
-# TODO: simplify code
 
 @app.route("/<category>")
 def main(category):
@@ -84,8 +83,6 @@ def main(category):
         
         # getting basket price
         total = getTotal(itemsInBasket)
-
-        # TODO: filter items by category
 
         # checks if basket is empty by value of total
         empty = False if total != 0 else True

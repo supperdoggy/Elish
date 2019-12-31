@@ -11,13 +11,13 @@
     <div class="back">
         <div style="text-align: center;">
             {% for n in basket %}
-            <h2>{{n.name}}: {{n.price}}</h2>
+            <h2>{{n.name}}: {{n.price}} ₴</h2>
             <h3>Кількість: {{n.howMany}}</h3>
         {% endfor %}
         <br>
         </div>
 
-        <h1>До сплати: {{total}} грн</h1>
+        <h1>До сплати: {{total}} ₴</h1>
         <div style="text-align: center;">
             <div class="row">
                 <div class="column">

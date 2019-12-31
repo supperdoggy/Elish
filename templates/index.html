@@ -38,11 +38,15 @@
                             <div>
                                 <div class="row">
                                     <div class="column">
-                                        <label>{{b.name}} - {{b.price}} {{b.howMany}}</label>
+                                        <label>{{b.name}} - {{b.price}} ₴ | кількість: {{b.howMany}} шт</label>
 
                                     </div>
                                     <div class="column">
-                                        <a href="/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}"><input class="delete" type="button" value="Delete"></a>
+                                        <button onclick="window.location.href='/deleteitemfrombasket/{{b.name}}/{{b.price}}/{{b.category}}'" class="delete">
+                                            <span>
+                                                Видалити
+                                            </span>
+                                        </button>
                                     </div>
                                 </div>
                                 
@@ -51,11 +55,13 @@
                     <br>
                     <form action="/bill">
                         <div>
-                            <h1>Total = {{total}}</h1>
+                            <h1>Total = {{total}} ₴</h1>
                         </div>
                 
                         {% if not empty %}
-                            <input type="submit" value="checkout" name="checkout">  
+                        <div style="text-align: center;">
+                            <input class="checkout" type="submit" value="Розрахувати" name="checkout">  
+                        </div>
                         {% endif %}
                         
                     </form>
