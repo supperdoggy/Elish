@@ -3,6 +3,7 @@ from constants import token, MaksId
 import datetime
 from botmethods import *
 import os
+from app import db, items
 
 # TODO: Fill db with items via telegram bot
 
@@ -41,7 +42,15 @@ def answer(message):
     # answer
     elif text == "Так":
         data = getData(message.from_user.id)
-        print(data)
+
+        # adding item
+        newItem = items(name=data["name"], price=data["price"], category=data["category"])
+
+        db.session.add(newItem)
+        db.session.commit()
+
+        # adding item
+
         sendStarterKeyboard(bot, message)
         os.remove("buffer/%s.json" % message.from_user.id)
     elif text == "Ні":
