@@ -8,7 +8,8 @@ from sqlalchemy.orm import sessionmaker
 from save import *
 from constants import *
 
-
+# TODO: create field for masters name (the one who did the procedure) 
+# TODO: possibility of adding new masters and removing old one
 # TODO: short, long cut
 # TODO: make it possible to write amout of paint
 
@@ -23,6 +24,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 # secret key
 app.secret_key = secretKey
+
 
 # ========================== db models ========================== #
 
@@ -57,6 +59,7 @@ class basket(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.datetime.now())
     category = db.Column(db.String(20))
     owner = db.Column(db.String)
+    # masterName = db.Column(db.String)
     howMany = db.Column(db.Integer, default=1)
 
     def __repl__(self):
@@ -64,14 +67,14 @@ class basket(db.Model):
 
 # ========================== db models ========================== #
 
-
+# path with items which are in selected category
 @app.route("/<category>")
 def main(category):
     if session.get("logged_in"):
         # test current user
         current_user = session.get("user")
 
-        # getting all items
+        # if category = 0 then we just getting all items, else getting items which in selected category
         if category == 0:
             allItems = items.query.all()
         else:
@@ -98,9 +101,16 @@ def mainIndex():
 # тут кнопочки для того шоб вибрати послугами
 # також корзина з вибраними послугами
 
+
 # path for adding item to basket
-@app.route("/addItemToBasket/<name>/<int:price>/<category>")
-def addItemToBasket(name, price, category):
+
+# ====================================================
+
+# TODO: add either path for masters name or insert it into the bill template (as an option)
+
+# ====================================================
+@app.route("/addItemToBasket/<name>/<int:price>/<category>") # /<masterName>
+def addItemToBasket(name, price, category):# masterName
     if session.get("logged_in"):
         current_user = session.get("user")
         if itemIsInBasketAlready(name, price, category, basket, current_user):
@@ -152,11 +162,11 @@ def deleteItemFromBasket(name, price, category):
         # але тоді треба буде тупо додати всі товари
 
         # checking if item is in the basket already
-        # if is and amout is more  than 1 than it deletes only one piece
+        # if is and amout is more  than 1 than it deletes only one piece from howMuch
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
             getItemFromBasket(name, price, category, basket, current_user).howMany -= 1
             
-        # if not then it deletes the whole item
+        # if not then it deletes the whole item from the basket
         else:
             db.session.delete(getItemFromBasket(name, price, category, basket, current_user))
         

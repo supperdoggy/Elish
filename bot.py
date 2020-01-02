@@ -6,6 +6,9 @@ import os
 from app import db, items
 
 
+# TODO: posibility of deleting items from db
+
+
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])
@@ -43,6 +46,7 @@ def answer(message):
     # send information about how to add new item
     elif text == "Додати нову послугу":
         bot.reply_to(message, "Уведіть назву в форматі товар-ціна-Категорія\nНаприклад: 'Стрижка жіноча-12-Стрижка'")
+        bot.send_message(message.chat.id, "Зверніть увагу, перелік категорій такий:\nСтрижка, Зачіска, Завивка, Фарбування, Макіяж, Манікюр, Педикюр, Дипіляція")
 
     # ================================== answer ==================================
     elif text == "Так":
@@ -85,23 +89,28 @@ def answer(message):
         if checkRequirements(message.text)["ifTrue"]:
             # getting dict with name, price, category
             data = checkRequirements(message.text)
+
+            # saving data into buffer
+            saveData(data, message.from_user.id)
+
             # building answer for bot
             ans = "Ім'я послуги - " + data["name"] + "\n" + "Ціна послуги - " + data["price"] + "\n"+ "Категорія послуги - " + data["category"]
+
+            # keyboard
+            main = telebot.types.ReplyKeyboardMarkup(row_width=3)
+            btn1 = telebot.types.KeyboardButton("Так")
+            btn2 = telebot.types.KeyboardButton("Ні")
+            main.add(btn1, btn2)
+
+
+            # sending markup
+            bot.send_message(message.chat.id, "Ви дійсно хочете додати в базу цей продукт?", reply_markup=main)
         else:
             ans = "Непрaвильний формат заповнення"
         # sending answer to user
         bot.send_message(message.chat.id, ans)
-
-        # keyboard
-        main = telebot.types.ReplyKeyboardMarkup(row_width=3)
-        btn1 = telebot.types.KeyboardButton("Так")
-        btn2 = telebot.types.KeyboardButton("Ні")
-        main.add(btn1, btn2)
-
-        # saving data into buffer
-        saveData(data, message.from_user.id)
-        # sending markup
-        bot.send_message(message.chat.id, "Ви дійсно хочете додати в базу цей продукт?", reply_markup=main)
+    else:
+        bot.reply_to(message, "Я вас не розумію. Попробуйте знову")
 
 # bot pooling
 bot.polling(none_stop=True)

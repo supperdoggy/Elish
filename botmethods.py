@@ -39,7 +39,7 @@ def checkRequirements(text):
         return {"ifTrue":True, "name":name, "price":nums, "category":category}
 
     else:
-        return {"ifTrue":False, "name":name, "price":nums, "category":category}
+        return {"ifTrue":False}
 
 def saveData(data, userID):
     f = open("buffer/%s.json" %userID, "w+")
