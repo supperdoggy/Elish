@@ -186,7 +186,7 @@ def checkout():
         
         # saving data into txt file named after todays date
         total = getTotal(itemsInBasket)
-        saveData(itemsInBasket, total)
+        saveData(itemsInBasket, total, current_user)
 
         # deleting items in basket
         deleteAllBasket(itemsInBasket, db)

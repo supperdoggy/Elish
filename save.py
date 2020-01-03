@@ -2,11 +2,12 @@ import datetime
 import os
 
 # saving data for python bot
-def saveData(basket, total):
+def saveData(basket, total, current_user):
     if os.path.exists("bills/" + str(datetime.date.today()) + ".txt"):
         f = open("bills/" + str(datetime.date.today()) + ".txt", "a+")
         f.write("\n"+"-"*10 + "\n")
-        f.write( "Час: %s"%datetime.datetime.now() + "\n\n")
+        f.write("Касир: %s" %current_user + "\n")
+        f.write("Час: %s"%datetime.datetime.now() + "\n\n")
 
         for n in basket:
             f.write("Ім'я послуги: " + str(n.name) + "\n")
@@ -17,11 +18,11 @@ def saveData(basket, total):
         f.write("\n\n")
         f.write("Вартість послуг: " + str(total) + "\n")
         f.close()
-
-        
+ 
     else:
         f = open("bills/" + str(datetime.date.today()) + ".txt", "w+")
         f.write("\n"+"-"*10 + "\n")
+        f.write("Касир: %s" %current_user + "\n")
         f.write( "Час: %s"%datetime.datetime.now() + "\n")
 
         for n in basket:
