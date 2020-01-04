@@ -11,7 +11,7 @@ def saveData(basket, total, current_user, master):
 
     f.write("\n"+"-"*10 + "\n")
     f.write("Касир: %s" %current_user + "\n")
-    f.write("Майстр: %s" %master + "\n")
+    f.write("Майстер: %s" %master + "\n")
     f.write("Час: %s"%datetime.datetime.now() + "\n\n")
 
     for n in basket:
