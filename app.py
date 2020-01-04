@@ -13,6 +13,7 @@ from constants import *
 # TODO: make it possible to write amout of paint
 
 # TODO: SIMPLOFY CODE
+#       maybe make own methods for app.route?
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
