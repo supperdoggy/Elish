@@ -1,0 +1,26 @@
+body{
+    text-align: center;
+    background-color:#ABEBC6;
+}
+
+.back{
+    border-radius: 25px;
+    background: white;
+    padding: 20px;
+    width: 80%;
+    margin: 0 auto;
+  
+}
+
+.button {
+    border: 2px solid rgb(192, 240, 62);
+    border-radius: 8px;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    width: 100%;
+  }

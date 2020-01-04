@@ -8,11 +8,11 @@ from sqlalchemy.orm import sessionmaker
 from save import *
 from constants import *
 
-# TODO: create field for masters name (the one who did the procedure) 
 # TODO: possibility of adding new masters and removing old one
 # TODO: short, long cut
 # TODO: make it possible to write amout of paint
 
+# TODO: SIMPLOFY CODE
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
@@ -26,7 +26,7 @@ migrate = Migrate(app, db)
 app.secret_key = secretKey
 
 
-# ========================== db models ========================== #
+# ========================== DATABASE MODELS ========================== #
 
 # model class for users
 class users(db.Model):
@@ -65,7 +65,12 @@ class basket(db.Model):
     def __repl__(self):
         return "<Item %s>" % self.id
 
-# ========================== db models ========================== #
+# ========================== DATABASE MODELS ========================== #
+
+# ==================================================== TEMPLATES ==================================================== #
+
+
+# ========================== MAIN INDEX ========================== #
 
 # path with items which are in selected category
 @app.route("/<category>")
@@ -101,14 +106,54 @@ def mainIndex():
 # тут кнопочки для того шоб вибрати послугами
 # також корзина з вибраними послугами
 
+# ========================== MAIN INDEX ========================== #
+
+# ========================== BILL TEMPLATE ========================== #
+@app.route("/bill")
+def bill():
+    if session.get("logged_in"):
+        current_user = session.get("user")
+        itemsInBasket = basket.query.filter_by(owner=current_user).all()
+        total = getTotal(itemsInBasket)
+        return render_template("bill.html", basket=itemsInBasket, total=total, master=session.get("master"))
+    else:
+        return redirect("/login")
+
+# ========================== BILL TEMPLATE ========================== #
+
+# ========================== LOGIN ========================== #
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    # resseting cookies
+    session["logged_in"] = False
+    session["user"] = None
+
+    # TODO: add master for each category and more checks as well
+    session["master"] = None
+
+    if request.method == "POST":
+        # if password and username matches in db then True
+        if checkAccess(request.form["password"], request.form["username"], users):
+
+            # updating cookie
+            session["logged_in"] = True
+            session["user"] = request.form["username"]
+
+            return redirect("/")
+        else:
+            # else redirect back to login
+            return redirect("/login")
+    else:
+        return render_template("login.html")
+# ========================== LOGIN ========================== #
+
+# ==================================================== TEMPLATES ==================================================== #
+
+# ==================================================== ACTION URLS ==================================================== #
+
 
 # path for adding item to basket
 
-# ====================================================
-
-# TODO: add either path for masters name or insert it into the bill template (as an option)
-
-# ====================================================
 @app.route("/addItemToBasket/<name>/<int:price>/<category>") # /<masterName>
 def addItemToBasket(name, price, category):# masterName
     if session.get("logged_in"):
@@ -156,10 +201,6 @@ def deleteitemFromItems(name, price, category):
 def deleteItemFromBasket(name, price, category):
     if session.get("logged_in"):
         current_user = session.get("user")
-        
-        # кароче треба замість того шоб добавляти одне й те саме, можна просто приробити віконечко і там відображати кількість товарів
-        # + можна буде зробити розрахунок на фарбу
-        # але тоді треба буде тупо додати всі товари
 
         # checking if item is in the basket already
         # if is and amout is more  than 1 than it deletes only one piece from howMuch
@@ -177,57 +218,52 @@ def deleteItemFromBasket(name, price, category):
     else:
         return redirect("/login")
 
-
+# path for saving data
 @app.route("/checkout")
 def checkout():
     if session.get("logged_in"):
         current_user = session.get("user")
+        master = session.get("master")
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
         
         # saving data into txt file named after todays date
         total = getTotal(itemsInBasket)
-        saveData(itemsInBasket, total, current_user)
+        saveData(itemsInBasket, total, current_user, master)
 
         # deleting items in basket
         deleteAllBasket(itemsInBasket, db)
+
+        # deleting master name
+        session["master"] = None
 
         return redirect("/")
     else:
         return redirect("/login")
 
-# bill template
-@app.route("/bill")
-def bill():
+# ====================================================
+#                    DANGER ZONE                       #
+# ====================================================
+
+@app.route("/master/<master>")
+def confirmMaster(master):
     if session.get("logged_in"):
-        current_user = session.get("user")
-        itemsInBasket = basket.query.filter_by(owner=current_user).all()
-        total = getTotal(itemsInBasket)
-        return render_template("bill.html", basket=itemsInBasket, total=total)
+        session["master"] = master
+        return redirect("/bill")
+    else:
+        return redirect("/login") 
+
+@app.route("/master")
+def chooseMaster():
+    if session.get("logged_in"):
+        return render_template("master.html", masters = masters)
     else:
         return redirect("/login")
 
-# ========================== login ========================== #
-@app.route("/login", methods=["POST", "GET"])
-def login():
-    # resseting cookies
-    session["logged_in"] = False
-    session["user"] = None
+# ====================================================
+#                    DANGER ZONE                      #
+# ====================================================
 
-    if request.method == "POST":
-        # if password and username matches in db then True
-        if checkAccess(request.form["password"], request.form["username"], users):
-
-            # updating cookie
-            session["logged_in"] = True
-            session["user"] = request.form["username"]
-
-            return redirect("/")
-        else:
-            # else redirect back to login
-            return redirect("/login")
-    else:
-        return render_template("login.html")
-# ========================== login ========================== #
+# ==================================================== ACTION URLS ==================================================== #
 
 if __name__ == "__main__":
     app.run(debug=True)
