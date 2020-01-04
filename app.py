@@ -153,7 +153,6 @@ def login():
 
 
 # path for adding item to basket
-
 @app.route("/addItemToBasket/<name>/<int:price>/<category>") # /<masterName>
 def addItemToBasket(name, price, category):# masterName
     if session.get("logged_in"):
@@ -240,8 +239,9 @@ def checkout():
     else:
         return redirect("/login")
 
+# TODO: simplify code
 # ====================================================
-#                    DANGER ZONE                       #
+#                    DANGER ZONE                     #
 # ====================================================
 
 @app.route("/master/<master>")
@@ -260,7 +260,7 @@ def chooseMaster():
         return redirect("/login")
 
 # ====================================================
-#                    DANGER ZONE                      #
+#                    DANGER ZONE                     #
 # ====================================================
 
 # ==================================================== ACTION URLS ==================================================== #

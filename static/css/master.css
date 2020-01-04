@@ -7,7 +7,7 @@ body{
     border-radius: 25px;
     background: white;
     padding: 20px;
-    width: 80%;
+    width: 50%;
     margin: 0 auto;
   
 }
@@ -22,5 +22,5 @@ body{
     display: inline-block;
     font-size: 16px;
     transition-duration: 0.4s;
-    width: 100%;
+    width: 50%;
   }

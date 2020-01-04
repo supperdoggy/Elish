@@ -8,16 +8,19 @@
     <link rel="stylesheet" href="static/css/master.css">
 </head>
 <body>
-    <h1>Оберіть майстра</h1>
-    {% for m in masters %}
+    <div class="back">
+        <h1>Оберіть майстра</h1>
+        {% for m in masters %}
+    
+            <button onclick="window.location.href='/master/{{m}}'" class="button">
+            <span>
+                {{m}}
+            </span>
+            </button>
+    
+        {% endfor %}
+    </div>
 
-        <button onclick="window.location.href='/master/{{m}}'" class="button">
-        <span>
-            {{m}}
-        </span>
-        </button>
-
-    {% endfor %}
     
 </body>
 </html>
