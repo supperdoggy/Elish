@@ -10,15 +10,19 @@
 <body>
     <div class="back">
         <h1>Оберіть майстра</h1>
-        {% for m in masters %}
-    
-            <button onclick="window.location.href='/master/{{m}}'" class="button">
-            <span>
-                {{m}}
-            </span>
-            </button>
-    
-        {% endfor %}
+
+        <div>
+            <form action="/master" method="POST">
+                <select name="selector" id="selector">
+                    {% for e in masters %}
+                        <option value="{{e}}">{{e}}</option>
+                    {% endfor %}
+                  </select>
+                  <br>
+                  <input type="submit" class="button" value="submit">
+            </form>
+        </div>
+        <br>
     </div>
 
     

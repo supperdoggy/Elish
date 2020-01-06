@@ -245,18 +245,14 @@ def checkout():
 #                    DANGER ZONE                     #
 # ====================================================
 
-@app.route("/master/<master>")
-def confirmMaster(master):
-    if session.get("logged_in"):
-        session["master"] = master
-        return redirect("/bill")
-    else:
-        return redirect("/login") 
-
-@app.route("/master")
+@app.route("/master", methods=["POST", "GET"])
 def chooseMaster():
     if session.get("logged_in"):
-        return render_template("master.html", masters = masters)
+        if request.method == "POST":
+            session["master"] = request.form["selector"]
+            return redirect("/bill")
+        else:
+            return render_template("master.html", masters = masters)
     else:
         return redirect("/login")
 
