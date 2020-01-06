@@ -3,6 +3,9 @@ from string import ascii_lowercase, digits
 import json
 import telebot
 
+# shitcode, if text recieved fits the form: "str-int-category" 
+# then returns list tuple with answer if fits, then returns values
+# else just returns answer : False
 def checkRequirements(text):
     i = 0
     firstChar = False
@@ -27,7 +30,6 @@ def checkRequirements(text):
             nums += text[i]
         elif minus == 1 and text[i] in ascii_lowercase:
             nums = False
-
         i+=1
 
     for c in categories:
@@ -41,10 +43,12 @@ def checkRequirements(text):
     else:
         return {"ifTrue":False}
 
+# saving data into buffer folder
 def saveData(data, userID):
     f = open("buffer/%s.json" %userID, "w+")
     json.dump(data, f)
 
+# getting data from buffer folder
 def getData(userID):
     try:
         f = open("buffer/%s.json" %userID, "r")
@@ -52,6 +56,7 @@ def getData(userID):
     except:
         return None
 
+# starter keyboard which comes right after /start command
 def sendStarterKeyboard(bot, message):
     # keyboard
     main = telebot.types.ReplyKeyboardMarkup(row_width=3)

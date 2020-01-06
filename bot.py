@@ -59,7 +59,6 @@ def answer(message):
         db.session.commit()
 
         # adding item
-
         sendStarterKeyboard(bot, message)
         os.remove("buffer/%s.json" % message.from_user.id)
     elif text == "Ні":
@@ -82,7 +81,6 @@ def answer(message):
         except:
             bot.reply_to(message, "Не вдалося знайти звіт за даний день")
 
-
     # checks if first char is letter to try do add new item into db
     elif text[0].lower() in ascii_lowercase or text[0].lower() in ukrLetters:
         # if text contains name-price-category then True and returns dict with name, price and category
@@ -101,7 +99,6 @@ def answer(message):
             btn1 = telebot.types.KeyboardButton("Так")
             btn2 = telebot.types.KeyboardButton("Ні")
             main.add(btn1, btn2)
-
 
             # sending markup
             bot.send_message(message.chat.id, "Ви дійсно хочете додати в базу цей продукт?", reply_markup=main)
