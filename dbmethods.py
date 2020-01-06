@@ -14,15 +14,11 @@ def randomString(stringLenght=24):
 
 # getting item from items
 def getItemFromItems(name, price, category, items):
-    i = 0
-    try:
-        while True:
-            if items.query[i].name == name and items.query[i].price == price and items.query[i].category == category:
-                return items.query[i]
-            else:
-                i += 1
-    except:
-        return 404
+    itemsFromItems = items.query.all()
+    for n in itemsFromItems:
+        if name == n.name and price == n.price and category == n.category:
+            return n
+    return 404
 
 # appending item to the basket
 def appendToBasket(name, price, category, basket, current_user, db):

@@ -1,9 +1,9 @@
-from flask import Flask, redirect, render_template,request
+from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from dbmethods import *
 from flask_migrate import Migrate
-from flask  import  session
+from flask import session
 from sqlalchemy.orm import sessionmaker
 from save import *
 from constants import *
@@ -41,6 +41,8 @@ class users(db.Model):
         return "<User %s>" % self.id
 
 # model class for items
+
+
 class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uniqueId = db.Column(db.String(24))
@@ -53,6 +55,8 @@ class items(db.Model):
         return "<Item %s>" % self.id
 
 # model class for basket
+
+
 class basket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -88,7 +92,7 @@ def main(category):
 
         # getting all items in basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
-        
+
         # getting basket price
         total = getTotal(itemsInBasket)
 
@@ -96,9 +100,9 @@ def main(category):
         empty = False if total != 0 else True
 
         # rendering template
-        return render_template("index.html", items=allItems, basket=itemsInBasket,total=total, empty=empty, categories=categories)
+        return render_template("index.html", items=allItems, basket=itemsInBasket, total=total, empty=empty, categories=categories)
     else:
-        return redirect("/login")  
+        return redirect("/login")
 
 # path for main index
 @app.route("/")
@@ -128,14 +132,12 @@ def login():
     # resseting cookies
     session["logged_in"] = False
     session["user"] = None
-
     # TODO: add master for each category and more checks as well
     session["master"] = None
 
     if request.method == "POST":
         # if password and username matches in db then True
         if checkAccess(request.form["password"], request.form["username"], users):
-
             # updating cookie
             session["logged_in"] = True
             session["user"] = request.form["username"]
@@ -154,12 +156,13 @@ def login():
 
 
 # path for adding item to basket
-@app.route("/addItemToBasket/<name>/<int:price>/<category>") # /<masterName>
-def addItemToBasket(name, price, category):# masterName
+@app.route("/addItemToBasket/<name>/<int:price>/<category>")  # /<masterName>
+def addItemToBasket(name, price, category):  # masterName
     if session.get("logged_in"):
         current_user = session.get("user")
         if itemIsInBasketAlready(name, price, category, basket, current_user):
-            item = getItemFromBasket(name, price, category, basket, current_user)
+            item = getItemFromBasket(
+                name, price, category, basket, current_user)
             item.howMany += 1
         else:
             appendToBasket(name, price, category, basket, current_user, db)
@@ -205,12 +208,14 @@ def deleteItemFromBasket(name, price, category):
         # checking if item is in the basket already
         # if is and amout is more  than 1 than it deletes only one piece from howMuch
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
-            getItemFromBasket(name, price, category, basket, current_user).howMany -= 1
-            
+            getItemFromBasket(name, price, category, basket,
+                              current_user).howMany -= 1
+
         # if not then it deletes the whole item from the basket
         else:
-            db.session.delete(getItemFromBasket(name, price, category, basket, current_user))
-        
+            db.session.delete(getItemFromBasket(
+                name, price, category, basket, current_user))
+
         db.session.commit()
         # saving changes of db
         # redirecting into main index
@@ -225,12 +230,12 @@ def checkout():
         current_user = session.get("user")
 
         # JUST TEST MASTER PICK !
-        master = session.get("master")  
+        master = session.get("master")
         # NEED TO CHOOSE ONE MASTER PER CATEGORY IN BASKET !
 
         # getting items in current_user`s basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
-        
+
         # getting total price of items in basket
         total = getTotal(itemsInBasket)
 
@@ -242,7 +247,7 @@ def checkout():
 
         # deleting master name
         session["master"] = None
-        
+
         # redirecting to main index
         return redirect("/")
     else:
@@ -260,7 +265,7 @@ def chooseMaster():
             session["master"] = request.form["selector"]
             return redirect("/bill")
         else:
-            return render_template("master.html", masters = masters)
+            return render_template("master.html", masters=masters)
     else:
         return redirect("/login")
 
@@ -269,6 +274,7 @@ def chooseMaster():
 # ====================================================
 
 # ==================================================== ACTION URLS ==================================================== #
+
 
 if __name__ == "__main__":
     app.run(debug=True)
