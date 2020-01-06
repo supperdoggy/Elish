@@ -240,11 +240,11 @@ def checkout():
     else:
         return redirect("/login")
 
-# TODO: simplify code
 # ====================================================
 #                    DANGER ZONE                     #
 # ====================================================
 
+# TODO: check for categories and for each category found in basket pick master
 @app.route("/master", methods=["POST", "GET"])
 def chooseMaster():
     if session.get("logged_in"):
