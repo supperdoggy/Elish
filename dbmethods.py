@@ -51,14 +51,11 @@ def getItemFromBasket(name, price, category, basket, owner):
 # checking username and password
 def checkAccess(password, username, users):
     i = 0
-    try:
-        while True:
-            if users.query[i].username == username and users.query[i].password == password:
-                return True
-            else:
-                i += 1
-    except:
-        return False
+    usersList = users.query.all()
+    for user in usersList:
+        if username == user.username and password == user.password:
+            return True
+    return False
 
 # checking if item exists in db
 def checkIfExists(name, price, category, items):
@@ -79,9 +76,9 @@ def getTotal(basket):
         total += n.price * n.howMany
     return total
 
-# deleting everything from basket
-def deleteAllBasket(basket, db):
-    for n in basket:
+# deleting everything from db model
+def deleteAllModel(model, db):
+    for n in model:
         db.session.delete(n)
         db.session.commit()
             

@@ -231,7 +231,7 @@ def checkout():
         saveData(itemsInBasket, total, current_user, master)
 
         # deleting items in basket
-        deleteAllBasket(itemsInBasket, db)
+        deleteAllModel(itemsInBasket, db)
 
         # deleting master name
         session["master"] = None
