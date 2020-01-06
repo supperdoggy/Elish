@@ -2,3 +2,4 @@ secret
 constants.py
 bills
 main.db
+migrations
