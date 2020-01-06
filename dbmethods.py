@@ -34,15 +34,11 @@ def appendToBasket(name, price, category, basket, current_user, db):
 
 # getting item from the basket
 def getItemFromBasket(name, price, category, basket, owner):
-    i = 0
-    try:
-        while True:
-            if basket.query[i].name == name and basket.query[i].price == price and basket.query[i].category == category and basket.query[i].owner == owner:
-                return basket.query[i]
-            else:
-                i += 1
-    except:
-        return 404
+    itemsInBasket = basket.query.filter_by(owner=owner).all()
+    for n in itemsInBasket:
+        if name == n.name and price == n.price and category == n.category:
+            return n
+    return 404
 
 # checking username and password
 def checkAccess(password, username, users):
