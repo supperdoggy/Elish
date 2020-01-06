@@ -81,4 +81,12 @@ def deleteAllModel(model, db):
     for n in model:
         db.session.delete(n)
         db.session.commit()
-            
+
+# checks which categories are in basket and returns it via list
+def categoriesCheck(basket):
+    items = basket.query.all()
+    categories = []
+    for i in items:
+        if i.category not in categories:
+            categories.append(i.category)
+    return categories

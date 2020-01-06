@@ -260,6 +260,14 @@ def chooseMaster():
 #                    DANGER ZONE                     #
 # ====================================================
 
+@app.route("/test")
+def test():
+    categoriesInBakset = categoriesCheck(basket)
+    ans = ""
+    for i in categoriesInBakset:
+        ans += i + ", "
+    return ans
+
 # ==================================================== ACTION URLS ==================================================== #
 
 if __name__ == "__main__":
