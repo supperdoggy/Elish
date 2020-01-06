@@ -50,16 +50,13 @@ def checkAccess(password, username, users):
     return False
 
 # checking if item exists in db
-def checkIfExists(name, price, category, items):
+def checkIfExists(name, price, category, model):
     i = 0
-    try:
-        while True:
-            if items.query[i].name == name and items.query[i].price == price and items.query[i].category == category:
-                return True
-            else:
-                i += 1
-    except:
-        return False
+    itemsInModel = model.query.all()
+    for n in itemsInModel:
+        if name == n.name and price == n.price and category == n.category:
+            return True
+    return False
 
 # getting Total value of the basket
 def getTotal(basket):
