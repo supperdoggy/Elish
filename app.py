@@ -223,11 +223,18 @@ def deleteItemFromBasket(name, price, category):
 def checkout():
     if session.get("logged_in"):
         current_user = session.get("user")
-        master = session.get("master")
+
+        # JUST TEST MASTER PICK !
+        master = session.get("master")  
+        # NEED TO CHOOSE ONE MASTER PER CATEGORY IN BASKET !
+
+        # getting items in current_user`s basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
         
-        # saving data into txt file named after todays date
+        # getting total price of items in basket
         total = getTotal(itemsInBasket)
+
+        # saving data into txt file named after today`s date
         saveData(itemsInBasket, total, current_user, master)
 
         # deleting items in basket
@@ -235,7 +242,8 @@ def checkout():
 
         # deleting master name
         session["master"] = None
-
+        
+        # redirecting to main index
         return redirect("/")
     else:
         return redirect("/login")
