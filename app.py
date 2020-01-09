@@ -229,9 +229,7 @@ def checkout():
     if session.get("logged_in"):
         current_user = session.get("user")
 
-        # JUST TEST MASTER PICK !
         masters = session.get("masters")
-        # NEED TO CHOOSE ONE MASTER PER CATEGORY IN BASKET !
 
         # getting items in current_user`s basket
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
@@ -253,11 +251,7 @@ def checkout():
     else:
         return redirect("/login")
 
-# ====================================================
-#                    DANGER ZONE                     #
-# ====================================================
-
-# TODO: for each category found in basket pick master
+# path for choosing masters
 @app.route("/master", methods=["POST", "GET"])
 def chooseMaster():
     if session.get("logged_in"):
@@ -275,10 +269,6 @@ def chooseMaster():
             return render_template("master.html", masters=masters, category=category)
     else:
         return redirect("/login")
-
-# ====================================================
-#                    DANGER ZONE                     #
-# ====================================================
 
 # ==================================================== ACTION URLS ==================================================== #
 
