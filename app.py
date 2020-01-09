@@ -119,6 +119,7 @@ def mainIndex():
 def bill():
     if session.get("logged_in"):
         if request.method == "POST":
+            # saving data and resseting cokkies
             checkout(session, basket, db)
             return redirect("/")
         else:
