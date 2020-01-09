@@ -11,7 +11,6 @@ from constants import *
 # TODO: possibility of adding new masters and removing old one
 # TODO: short, long cut
 # TODO: make it possible to write amout of paint
-
 # TODO: SIMPLOFY CODE
 #       maybe make own methods for app.route?
 
@@ -223,12 +222,10 @@ def deleteItemFromBasket(name, price, category):
         if itemIsInBasketAlready(name, price, category, basket, current_user) and getItemFromBasket(name, price, category, basket, current_user).howMany > 1:
             getItemFromBasket(name, price, category, basket,
                               current_user).howMany -= 1
-
         # if not then it deletes the whole item from the basket
         else:
             db.session.delete(getItemFromBasket(
                 name, price, category, basket, current_user))
-
         # saving changes of db
         db.session.commit()
         # redirecting into main index
