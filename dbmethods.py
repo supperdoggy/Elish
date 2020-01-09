@@ -72,7 +72,7 @@ def deleteAllModel(model, db):
         db.session.commit()
 
 # checks which categories are in basket and returns it via list
-def categoriesCheck(basket, owner):
+def getCategories(basket, owner):
     items = basket.query.filter_by(owner=owner).all()
     categories = []
     for i in items:

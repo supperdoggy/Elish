@@ -13,11 +13,16 @@
 
         <div>
             <form action="/master" method="POST">
-                <select name="selector" id="selector">
-                    {% for e in masters %}
-                        <option value="{{e}}">{{e}}</option>
-                    {% endfor %}
-                  </select>
+                {% for e in category %}
+                <br>
+                        <h2>{{e}}</h2>
+                        <select name="{{e}}" id="{{e}}" required>
+                            {% for l in masters %}
+                                <option value="{{l}}">{{l}}</option>
+                            {% endfor %}
+                          </select>
+                {% endfor %}
+                
                   <br>
                   <input type="submit" class="button" value="submit">
             </form>

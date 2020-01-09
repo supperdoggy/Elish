@@ -120,7 +120,7 @@ def bill():
         current_user = session.get("user")
         itemsInBasket = basket.query.filter_by(owner=current_user).all()
         total = getTotal(itemsInBasket)
-        return render_template("bill.html", basket=itemsInBasket, total=total, master=session.get("master"))
+        return render_template("bill.html", basket=itemsInBasket, total=total, master=session.get("masters"))
     else:
         return redirect("/login")
 
@@ -230,7 +230,7 @@ def checkout():
         current_user = session.get("user")
 
         # JUST TEST MASTER PICK !
-        master = session.get("master")
+        masters = session.get("masters")
         # NEED TO CHOOSE ONE MASTER PER CATEGORY IN BASKET !
 
         # getting items in current_user`s basket
@@ -240,7 +240,7 @@ def checkout():
         total = getTotal(itemsInBasket)
 
         # saving data into txt file named after today`s date
-        saveData(itemsInBasket, total, current_user, master)
+        saveData(itemsInBasket, total, current_user, masters)
 
         # deleting items in basket
         deleteAllModel(itemsInBasket, db)
@@ -261,11 +261,18 @@ def checkout():
 @app.route("/master", methods=["POST", "GET"])
 def chooseMaster():
     if session.get("logged_in"):
+        # current user
+        current_user = session.get("user")
+        # categories of items that are in basket
+        category = getCategories(basket, current_user)
+        session["masters"] = []
         if request.method == "POST":
-            session["master"] = request.form["selector"]
+            for n in category:
+                master = request.form["%s"%n]
+                session["masters"].append("%s"%n + ": " + master)
             return redirect("/bill")
         else:
-            return render_template("master.html", masters=masters)
+            return render_template("master.html", masters=masters, category=category)
     else:
         return redirect("/login")
 
