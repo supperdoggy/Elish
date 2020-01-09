@@ -114,13 +114,22 @@ def mainIndex():
 # ========================== MAIN INDEX ========================== #
 
 # ========================== BILL TEMPLATE ========================== #
-@app.route("/bill")
+
+@app.route("/bill", methods=["POST", "GET"])
 def bill():
     if session.get("logged_in"):
-        current_user = session.get("user")
-        itemsInBasket = basket.query.filter_by(owner=current_user).all()
-        total = getTotal(itemsInBasket)
-        return render_template("bill.html", basket=itemsInBasket, total=total, master=session.get("masters"))
+        if request.method == "POST":
+            checkout(session, basket, db)
+            return redirect("/")
+        else:
+            # getting current user
+            current_user = session.get("user")
+            # getting user`s personal basket
+            itemsInBasket = basket.query.filter_by(owner=current_user).all()
+            # getting total of the basket
+            total = getTotal(itemsInBasket)
+            # rendering the bill template
+            return render_template("bill.html", basket=itemsInBasket, total=total, master=session.get("masters"))
     else:
         return redirect("/login")
 
@@ -132,7 +141,6 @@ def login():
     # resseting cookies
     session["logged_in"] = False
     session["user"] = None
-    # TODO: add master for each category and more checks as well
     session["master"] = None
 
     if request.method == "POST":
@@ -156,18 +164,22 @@ def login():
 
 
 # path for adding item to basket
-@app.route("/addItemToBasket/<name>/<int:price>/<category>")  # /<masterName>
-def addItemToBasket(name, price, category):  # masterName
+@app.route("/addItemToBasket/<name>/<int:price>/<category>")
+def addItemToBasket(name, price, category):
     if session.get("logged_in"):
+        # getting current user
         current_user = session.get("user")
+        # checking if item is in the basket, then just increasing number of them
+        # else just adding into the basket the whole item
         if itemIsInBasketAlready(name, price, category, basket, current_user):
             item = getItemFromBasket(
                 name, price, category, basket, current_user)
             item.howMany += 1
         else:
             appendToBasket(name, price, category, basket, current_user, db)
-
+        # commiting changes in db
         db.session.commit()
+        # going back to main index
         return redirect("/")
     else:
         return redirect("/login")
@@ -216,40 +228,13 @@ def deleteItemFromBasket(name, price, category):
             db.session.delete(getItemFromBasket(
                 name, price, category, basket, current_user))
 
-        db.session.commit()
         # saving changes of db
+        db.session.commit()
         # redirecting into main index
         return redirect("/")
     else:
         return redirect("/login")
 
-# path for saving data
-@app.route("/checkout")
-def checkout():
-    if session.get("logged_in"):
-        current_user = session.get("user")
-
-        masters = session.get("masters")
-
-        # getting items in current_user`s basket
-        itemsInBasket = basket.query.filter_by(owner=current_user).all()
-
-        # getting total price of items in basket
-        total = getTotal(itemsInBasket)
-
-        # saving data into txt file named after today`s date
-        saveData(itemsInBasket, total, current_user, masters)
-
-        # deleting items in basket
-        deleteAllModel(itemsInBasket, db)
-
-        # deleting master name
-        session["master"] = None
-
-        # redirecting to main index
-        return redirect("/")
-    else:
-        return redirect("/login")
 
 # path for choosing masters
 @app.route("/master", methods=["POST", "GET"])

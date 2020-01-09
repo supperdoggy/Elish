@@ -1,5 +1,6 @@
 import random
 import string
+from save import saveData
 
 # checking if item is in the basket
 def itemIsInBasketAlready(name, price, category, basket, current_user):
@@ -79,3 +80,24 @@ def getCategories(basket, owner):
         if i.category not in categories:
             categories.append(i.category)
     return categories
+
+def checkout(session, basket, db):
+    # getting current user
+    current_user = session.get("user")
+    # getting list with masters and categories
+    masters = session.get("masters")
+
+    # getting items in current_user`s basket
+    itemsInBasket = basket.query.filter_by(owner=current_user).all()
+
+    # getting total price of items in basket
+    total = getTotal(itemsInBasket)
+
+    # saving data into txt file named after today`s date
+    saveData(itemsInBasket, total, current_user, masters)
+
+    # deleting items in basket
+    deleteAllModel(itemsInBasket, db)
+
+    # deleting masters names
+    session["masters"] = None

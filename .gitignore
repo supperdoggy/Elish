@@ -2,4 +2,5 @@ secret
 constants.py
 bills
 main.db
+buffer
 migrations
