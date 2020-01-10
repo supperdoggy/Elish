@@ -40,8 +40,6 @@ class users(db.Model):
         return "<User %s>" % self.id
 
 # model class for items
-
-
 class items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uniqueId = db.Column(db.String(24))
@@ -54,8 +52,6 @@ class items(db.Model):
         return "<Item %s>" % self.id
 
 # model class for basket
-
-
 class basket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -72,7 +68,6 @@ class basket(db.Model):
 # ========================== DATABASE MODELS ========================== #
 
 # ==================================================== TEMPLATES ==================================================== #
-
 
 # ========================== MAIN INDEX ========================== #
 
@@ -99,7 +94,7 @@ def main(category):
         empty = False if total != 0 else True
 
         # rendering template
-        return render_template("index.html", items=allItems, basket=itemsInBasket, total=total, empty=empty, categories=categories)
+        return render_template("index.html", items=allItems, basket=itemsInBasket, total=total, empty=empty, categories=categories, chosen=category)
     else:
         return redirect("/login")
 
@@ -180,7 +175,7 @@ def addItemToBasket(name, price, category):
         # commiting changes in db
         db.session.commit()
         # going back to main index
-        return redirect("/")
+        return redirect("/%s"%category)
     else:
         return redirect("/login")
 
@@ -195,9 +190,9 @@ def additemIntoItems(name, price, category):
         # saving changes of db
         db.session.commit()
         # redirecting into main index
-        return redirect("/")
+        return redirect("/%s"%category)
     else:
-        return redirect("/")
+        return redirect("/login")
 
 # path for deleting item from item model
 @app.route("/deleteitemFromItems/<name>/<int:price>/<category>")
@@ -209,7 +204,7 @@ def deleteitemFromItems(name, price, category):
     # saving changes of db
     db.session.commit()
     # redirecting into main index
-    return redirect("/")
+    return redirect("/%s"%category)
 
 # path from deleting item from basket
 @app.route("/deleteitemfrombasket/<name>/<int:price>/<category>")
@@ -229,7 +224,7 @@ def deleteItemFromBasket(name, price, category):
         # saving changes of db
         db.session.commit()
         # redirecting into main index
-        return redirect("/")
+        return redirect("/%s"%category)
     else:
         return redirect("/login")
 

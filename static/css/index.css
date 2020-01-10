@@ -54,6 +54,19 @@ body{
   width: 100%;
 }
 
+.chosenButton{
+  background-color: rgb(74, 170, 187); 
+  border-radius: 8px;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  width: 100%;
+}
+
 .delete{
   background-color: rgb(181, 46, 31); /* Green */
   border: none;
