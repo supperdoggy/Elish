@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Оберіть майстра</title>
     <link rel="stylesheet" href="static/css/master.css">
 </head>
 <body>
@@ -14,17 +14,16 @@
         <div>
             <form action="/master" method="POST">
                 {% for e in category %}
-                <br>
                         <h2>{{e}}</h2>
                         <select name="{{e}}" id="{{e}}" required>
                             {% for l in masters %}
                                 <option value="{{l}}">{{l}}</option>
                             {% endfor %}
                           </select>
+                          <br>
                 {% endfor %}
-                
-                  <br>
-                  <input type="submit" class="button" value="submit">
+                <br>
+                <input type="submit" class="button" value="submit">
             </form>
         </div>
         <br>

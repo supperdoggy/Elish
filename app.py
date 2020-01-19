@@ -99,9 +99,15 @@ def main(category):
         return redirect("/login")
 
 # path for main index
-@app.route("/")
+@app.route("/", methods=["POST", "GET"])
 def mainIndex():
-    return main(0)
+    if session.get("logged_in"):
+        if request.method == "POST":
+            pass
+        else:  
+            return render_template("hair.html")
+    else:
+        return redirect("/login")
 # тут кнопочки для того шоб вибрати послугами
 # також корзина з вибраними послугами
 
@@ -140,14 +146,14 @@ def login():
 
     if request.method == "POST":
         # if password and username matches in db then True
+        # else redirect back to login
         if checkAccess(request.form["password"], request.form["username"], users):
             # updating cookie
             session["logged_in"] = True
             session["user"] = request.form["username"]
 
-            return redirect("/")
+            return redirect("/Стрижка")
         else:
-            # else redirect back to login
             return redirect("/login")
     else:
         return render_template("login.html")
