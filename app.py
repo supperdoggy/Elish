@@ -13,6 +13,7 @@ from constants import *
 # TODO: make it possible to write amout of paint
 # TODO: SIMPLOFY CODE
 #       maybe make own methods for app.route?
+# TODO: Create posibility for clients to make an appointment
 
 # declaring app and template folder
 app = Flask(__name__, template_folder="templates")
@@ -105,7 +106,7 @@ def mainIndex():
         if request.method == "POST":
             pass
         else:  
-            return render_template("hair.html")
+            return main("Стрижка")
     else:
         return redirect("/login")
 # тут кнопочки для того шоб вибрати послугами

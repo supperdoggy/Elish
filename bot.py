@@ -4,10 +4,10 @@ import datetime
 from botmethods import *
 import os
 from app import db, items
+import re
 
 
 # TODO: posibility of deleting items from db
-
 
 bot = telebot.TeleBot(token)
 
@@ -23,6 +23,7 @@ def greetings(message):
 
     print(message)
 
+# TODO: rewrite text function, make system for bot to know what user should write (regexp)
 # if content type is text
 @bot.message_handler(content_types=["text"])
 def answer(message):
@@ -72,7 +73,7 @@ def answer(message):
     # ================================== answer ==================================
 
     # checks if first char of text is digit (2 because it`d need 1000 years to get valid bill 🤪)
-    elif text[0] == "2":
+    elif re.match("^[0-9]{4}-[0-9]{2}-[0-9]{2}", text):
         try:
             f = open("bills/" + message.text + ".txt", "rb")
             bot.send_document(message.from_user.id, f)
@@ -81,8 +82,8 @@ def answer(message):
         except:
             bot.reply_to(message, "Не вдалося знайти звіт за даний день")
 
-    # checks if first char is letter to try do add new item into db
-    elif text[0].lower() in ascii_lowercase or text[0].lower() in ukrLetters:
+    # checks text fits the form to try to add new item into db
+    elif re.match("^.+-[0-9]+-.+", text):
         # if text contains name-price-category then True and returns dict with name, price and category
         if checkRequirements(message.text)["ifTrue"]:
             # getting dict with name, price, category
